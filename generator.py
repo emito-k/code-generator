@@ -20,25 +20,32 @@ def getUserInput(prompt: str, regExp):
 
 def pushTab():
     global tabs
-    tabs += '\n'
+    tabs += '----'
 
 def popTab():
     global tabs
-    tabs += tabs[:len(tabs)-1]
+    tabs = tabs[:len(tabs)-4]
 
 def getTabs():
     global tabs
     return tabs
 
 def PROG():
+    print(getTabs() + "> " + "PROG")
+    pushTab()
+
     global output
     output += "main\n"
     GLOBVARS()
     ALGO()
     FUNCTIONS()
+    popTab()
     
 
 def GLOBVARS():
+    print(getTabs() + "> " + "GLOBVARS")
+    pushTab()
+
     global output
     rule = getUserInput("Enter GLOBVARS rule: ", r"^[1-2]$")
 
@@ -49,8 +56,12 @@ def GLOBVARS():
         VNAME()
         output += ',\n'
         GLOBVARS()
+    
+    popTab()
 
 def VTYP():
+    print(getTabs() + "> " + "VTYP")
+    pushTab()
     global output
     rule = getUserInput("Enter VTYPE rule: ", r"^[1-2]$")
 
@@ -58,18 +69,27 @@ def VTYP():
         output += "num "
     elif rule == "2":
         output += "text "
+    popTab()
 
 def VNAME():
+    print(getTabs() + "> " + "VNAME")
+    pushTab()
     global output, tokenClassVRegularExpression
     output += getUserInput("Enter variable name: ", tokenClassVRegularExpression)
+    popTab()
 
 def ALGO():
+    print(getTabs() + "> " + "ALGO")
+    pushTab()
     global output
     output += "\nbegin\n"
     INSTRUC()
     output += "\nend\n"
+    popTab()
 
 def INSTRUC():
+    print(getTabs() + "> " + "INSTRUC")
+    pushTab()
     global output
     rule = getUserInput("Enter INSTRUC rule: ", r"^[1-2]$")
 
@@ -80,8 +100,11 @@ def INSTRUC():
         COMMAND()
         output += "; "
         INSTRUC()
+    popTab()
 
 def COMMAND():
+    print(getTabs() + "> " + "COMMAND")
+    pushTab()
     global output
     rule = getUserInput("Enter COMMAND rule: ", r"^[1-6]$")
 
@@ -98,8 +121,11 @@ def COMMAND():
         CALL()
     elif rule == "6":
         BRANCH()
+    popTab()
 
 def ATOMIC():
+    print(getTabs() + "> " + "ATOMIC")
+    pushTab()
     global output
     rule = getUserInput("Enter ATOMIC rule: ", r"^[1-2]$")
 
@@ -107,8 +133,11 @@ def ATOMIC():
         VNAME()
     elif rule == "2":
         CONST()
+    popTab()
 
 def CONST():
+    print(getTabs() + "> " + "CONST")
+    pushTab()
     global output, tokenClassNRegularExpression, tokenClassTRegularExpression
     rule = getUserInput("Enter CONST rule: ", r"^[1-2]$")
 
@@ -116,8 +145,11 @@ def CONST():
         output += getUserInput("Enter a valid number: ", tokenClassNRegularExpression) + " "
     elif rule == "2":
         output += getUserInput("Enter a valid string: ", tokenClassTRegularExpression) + " "
+    popTab()
 
 def ASSIGN():
+    print(getTabs() + "> " + "ASSIGN")
+    pushTab()
     global output
     rule = getUserInput("Enter ASSIGN rule: ", r"^[1-2]$")
 
@@ -128,8 +160,11 @@ def ASSIGN():
         VNAME()
         output += " = "
         TERM()
+    popTab()
 
 def CALL():
+    print(getTabs() + "> " + "CALL")
+    pushTab()
     global output
     
     FNAME()
@@ -140,8 +175,11 @@ def CALL():
     output += ", "
     ATOMIC()
     output += ") "
+    popTab()
 
 def BRANCH():
+    print(getTabs() + "> " + "BRANCH")
+    pushTab()
     global output
 
     output += "if "
@@ -150,8 +188,11 @@ def BRANCH():
     ALGO()
     output += "\nelse "
     ALGO()
+    popTab()
 
 def TERM():
+    print(getTabs() + "> " + "TERM")
+    pushTab()
     rule = getUserInput("Enter TERM rule: ", r"^[1-3]$")
 
     if rule == "1":
@@ -160,8 +201,11 @@ def TERM():
         CALL()
     elif rule == "3":
         OP()
+    popTab()
 
 def OP():
+    print(getTabs() + "> " + "OP")
+    pushTab()
     global output
     rule = getUserInput("Enter OP rule: ", r"^[1-2]$")
 
@@ -177,24 +221,33 @@ def OP():
         output += ", "
         ARG()
         output += ")"
+    popTab()
 
 def ARG():
+    print(getTabs() + "> " + "ARG")
+    pushTab()
     rule = getUserInput("Enter ARG rule: ", r"^[1-2]$")
 
     if rule == "1":
         ATOMIC()
     elif rule == "2":
         OP()
+    popTab()
 
 def COND():
+    print(getTabs() + "> " + "COND")
+    pushTab()
     rule = getUserInput("Enter COND rule: ", r"^[1-2]$")
 
     if rule == "1":
         SIMPLE()
     elif rule == "2":
         COMPOSIT()
+    popTab()
 
 def SIMPLE():
+    print(getTabs() + "> " + "SIMPLE")
+    pushTab()
     global output
 
     BINOP()
@@ -203,8 +256,11 @@ def SIMPLE():
     output += ", "
     ATOMIC()
     output += ")"
+    popTab()
 
 def COMPOSIT():
+    print(getTabs() + "> " + "COMPOSIT")
+    pushTab()
     global output
 
     rule = getUserInput("Enter COMPOSIT rule: ", r"^[1-2]$")
@@ -221,8 +277,11 @@ def COMPOSIT():
         output += "("
         SIMPLE()
         output += ")"
+    popTab()
 
 def UNOP():
+    print(getTabs() + "> " + "UNOP")
+    pushTab()
     global output
 
     rule = getUserInput("Enter UNOP rule: ", r"^[1-2]$")
@@ -231,8 +290,11 @@ def UNOP():
         output += "not"
     elif rule == "2":
         output += "sqrt"
+    popTab()
 
 def BINOP():
+    print(getTabs() + "> " + "BINOP")
+    pushTab()
     global output
 
     rule = getUserInput("Enter BINOP rule: ", r"^[1-8]$")
@@ -253,13 +315,19 @@ def BINOP():
         output += "mul"
     elif rule == "2":
         output += "div"
+    popTab()
 
 def FNAME():
+    print(getTabs() + "> " + "FNAME")
+    pushTab()
     global output, tokenClassFRegularExpression
 
     output += getUserInput("Enter function name: ", tokenClassFRegularExpression)
+    popTab()
 
 def FUNCTIONS():
+    print(getTabs() + "> " + "FUNCTIONS")
+    pushTab()
     rule = getUserInput("Enter FUNCTIONS rule: ", r"^[1-2]$")
 
     if rule == "1":
@@ -267,12 +335,18 @@ def FUNCTIONS():
     elif rule == "2":
         DECL()
         FUNCTIONS()
+    popTab()
 
 def DECL():
+    print(getTabs() + "> " + "DECL")
+    pushTab()
     HEADER()
     BODY()
+    popTab()
 
 def HEADER():
+    print(getTabs() + "> " + "HEADER")
+    pushTab()
     global output
 
     FTYP()
@@ -284,8 +358,11 @@ def HEADER():
     output += ", "
     VNAME()
     output += ")"
+    popTab()
 
 def FTYP():
+    print(getTabs() + "> " + "FTYP")
+    pushTab()
     global output
 
     rule = getUserInput("Enter FTYP rule: ", r"^[1-2]$")
@@ -294,8 +371,11 @@ def FTYP():
         output += "num "
     elif rule == "2":
         output += "void "
+    popTab()
 
 def BODY():
+    print(getTabs() + "> " + "BODY")
+    pushTab()
     global output
 
     PROLOG()
@@ -304,16 +384,25 @@ def BODY():
     EPILOG()
     SUBFUNCS()
     output += "\nend"
+    popTab()
 
 def PROLOG():
+    print(getTabs() + "> " + "PROLOG")
+    pushTab()
     global output
     output += "{\n"
+    popTab()
 
 def EPILOG():
+    print(getTabs() + "> " + "EPILOG")
+    pushTab()
     global output
     output += "\n}\n"
+    popTab()
 
 def LOCVARS():
+    print(getTabs() + "> " + "LOCVARS")
+    pushTab()
     global output
 
     VTYP()
@@ -325,9 +414,13 @@ def LOCVARS():
     VTYP()
     VNAME()
     output += ",\n"
+    popTab()
 
 def SUBFUNCS():
+    print(getTabs() + "> " + "SUBFUNCS")
+    pushTab()
     FUNCTIONS()
+    popTab()
 
 def start():
     global output
