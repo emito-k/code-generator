@@ -103,7 +103,7 @@ def COMMAND(n):
     print(getTabs()* n + "> " + "COMMAND")
     
     global output
-    rule = getUserInput("Enter COMMAND rule: ", r"^[1-6]$")
+    rule = getUserInput("Enter COMMAND rule: ", r"^[1-7]$")
 
     if rule == "1":
         output += "skip"
