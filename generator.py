@@ -3,11 +3,11 @@ import re
 tokenClassVRegularExpression = r'^V_[a-z]([a-z]|[0-9])*$' # This regular expression accepts variable names
 tokenClassFRegularExpression = r'^F_[a-z]([a-z]|[0-9])*$' # This regular expression accepts function names
 tokenClassTRegularExpression = r"^[A-Z][a-z]{0,7}$" # This regular expression accepts strings
-tokenClassNRegularExpression = r"^-?(0|[1-9][0-9])*(\.[0-9]*[1-9])?$" # This accepts numbers that include
+tokenClassNRegularExpression = r"^-?(0|[1-9][0-9]*)(\.[0-9]*[1-9])?$" # This accepts numbers that include
 # BUG: This regular expression accepts -0, which is invalid but we'll ignore it for now
 
 output = ""
-
+tabs = ""
 # This function is supposed to get user input that matches the regular expression
 def getUserInput(prompt: str, regExp):
     while True:
@@ -18,9 +18,21 @@ def getUserInput(prompt: str, regExp):
         
         print("Invalid input")
 
+def pushTab():
+    global tabs
+    tabs += '\n'
+
+def popTab():
+    global tabs
+    tabs += tabs[:len(tabs)-1]
+
+def getTabs():
+    global tabs
+    return tabs
+
 def PROG():
     global output
-    output += "main"
+    output += "main\n"
     GLOBVARS()
     ALGO()
     FUNCTIONS()
@@ -28,24 +40,24 @@ def PROG():
 
 def GLOBVARS():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter GLOBVARS rule: ", r"^[1-2]$")
 
     if rule == "1":
         return
     elif rule == "2":
         VTYP()
         VNAME()
-        output += ','
+        output += ',\n'
         GLOBVARS()
 
 def VTYP():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter VTYPE rule: ", r"^[1-2]$")
 
     if rule == "1":
-        output += "num"
+        output += "num "
     elif rule == "2":
-        output += "text"
+        output += "text "
 
 def VNAME():
     global output, tokenClassVRegularExpression
@@ -53,31 +65,32 @@ def VNAME():
 
 def ALGO():
     global output
-    output += "begin"
+    output += "\nbegin\n"
     INSTRUC()
-    output += "end"
+    output += "\nend\n"
 
 def INSTRUC():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter INSTRUC rule: ", r"^[1-2]$")
 
     if rule == "1":
-        return
+        output += " "
+        return 
     elif rule == "2":
         COMMAND()
-        output += ";"
+        output += "; "
         INSTRUC()
 
 def COMMAND():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-6]$")
+    rule = getUserInput("Enter COMMAND rule: ", r"^[1-6]$")
 
     if rule == "1":
         output += "skip"
     elif rule == "2":
         output += "halt"
     elif rule == "3":
-        output += "return"
+        output += "return "
         ATOMIC()
     elif rule == "4":
         ASSIGN()
@@ -88,7 +101,7 @@ def COMMAND():
 
 def ATOMIC():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter ATOMIC rule: ", r"^[1-2]$")
 
     if rule == "1":
         VNAME()
@@ -97,23 +110,23 @@ def ATOMIC():
 
 def CONST():
     global output, tokenClassNRegularExpression, tokenClassTRegularExpression
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter CONST rule: ", r"^[1-2]$")
 
     if rule == "1":
-        output += getUserInput("Enter a valid number: ", tokenClassNRegularExpression)
+        output += getUserInput("Enter a valid number: ", tokenClassNRegularExpression) + " "
     elif rule == "2":
-        output +=getUserInput("Enter a valid string: ", tokenClassTRegularExpression)
+        output += getUserInput("Enter a valid string: ", tokenClassTRegularExpression) + " "
 
 def ASSIGN():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter ASSIGN rule: ", r"^[1-2]$")
 
     if rule == "1":
         VNAME()
-        output += "<input"
+        output += " <input"
     elif rule == "2":
         VNAME()
-        output += "="
+        output += " = "
         TERM()
 
 def CALL():
@@ -122,24 +135,24 @@ def CALL():
     FNAME()
     output += "("
     ATOMIC()
-    output += ","
+    output += ", "
     ATOMIC()
-    output += ","
+    output += ", "
     ATOMIC()
-    output += ")"
+    output += ") "
 
 def BRANCH():
     global output
 
-    output += "if"
+    output += "if "
     COND()
-    output += "then"
+    output += "\nthen "
     ALGO()
-    output += "else"
+    output += "\nelse "
     ALGO()
 
 def TERM():
-    rule = getUserInput("Enter rule: ", r"^[1-3]$")
+    rule = getUserInput("Enter TERM rule: ", r"^[1-3]$")
 
     if rule == "1":
         ATOMIC()
@@ -150,7 +163,7 @@ def TERM():
 
 def OP():
     global output
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter OP rule: ", r"^[1-2]$")
 
     if rule == "1":
         UNOP()
@@ -161,12 +174,12 @@ def OP():
         BINOP()
         output += "("
         ARG()
-        output += ","
+        output += ", "
         ARG()
         output += ")"
 
 def ARG():
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter ARG rule: ", r"^[1-2]$")
 
     if rule == "1":
         ATOMIC()
@@ -174,7 +187,7 @@ def ARG():
         OP()
 
 def COND():
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter COND rule: ", r"^[1-2]$")
 
     if rule == "1":
         SIMPLE()
@@ -187,20 +200,20 @@ def SIMPLE():
     BINOP()
     output += "("
     ATOMIC()
-    output += ","
+    output += ", "
     ATOMIC()
     output += ")"
 
 def COMPOSIT():
     global output
 
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter COMPOSIT rule: ", r"^[1-2]$")
 
     if rule == "1":
         BINOP()
         output += "("
         ATOMIC()
-        output += ","
+        output += ", "
         ATOMIC()
         output += ")"
     elif rule == "2":
@@ -212,7 +225,7 @@ def COMPOSIT():
 def UNOP():
     global output
 
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter UNOP rule: ", r"^[1-2]$")
 
     if rule == "1":
         output += "not"
@@ -222,7 +235,7 @@ def UNOP():
 def BINOP():
     global output
 
-    rule = getUserInput("Enter rule: ", r"^[1-8]$")
+    rule = getUserInput("Enter BINOP rule: ", r"^[1-8]$")
 
     if rule == "1":
         output += "or"
@@ -247,7 +260,7 @@ def FNAME():
     output += getUserInput("Enter function name: ", tokenClassFRegularExpression)
 
 def FUNCTIONS():
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter FUNCTIONS rule: ", r"^[1-2]$")
 
     if rule == "1":
         return
@@ -266,21 +279,21 @@ def HEADER():
     FNAME()
     output += "("
     VNAME()
-    output += ","
+    output += ", "
     VNAME()
-    output += ","
+    output += ", "
     VNAME()
     output += ")"
 
 def FTYP():
     global output
 
-    rule = getUserInput("Enter rule: ", r"^[1-2]$")
+    rule = getUserInput("Enter FTYP rule: ", r"^[1-2]$")
 
     if rule == "1":
-        output += "num"
+        output += "num "
     elif rule == "2":
-        output += "void"
+        output += "void "
 
 def BODY():
     global output
@@ -290,28 +303,28 @@ def BODY():
     ALGO()
     EPILOG()
     SUBFUNCS()
-    output += "end"
+    output += "\nend"
 
 def PROLOG():
     global output
-    output += "{"
+    output += "{\n"
 
 def EPILOG():
     global output
-    output += "}"
+    output += "\n}\n"
 
 def LOCVARS():
     global output
 
     VTYP()
     VNAME()
-    output += ","
+    output += ",\n"
     VTYP()
     VNAME()
-    output += ","
+    output += ",\n"
     VTYP()
     VNAME()
-    output += ","
+    output += ",\n"
 
 def SUBFUNCS():
     FUNCTIONS()
@@ -321,7 +334,7 @@ def start():
     output = ""
     PROG()
 
-    with open("output.txt", "w") as file:
+    with open("./samples/output.txt", "w") as file:
         file.write(output)
 
 start()
