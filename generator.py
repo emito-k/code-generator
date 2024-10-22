@@ -18,33 +18,30 @@ def getUserInput(prompt: str, regExp):
         
         print("Invalid input")
 
-def pushTab():
+def pushTab(n):
     global tabs
     tabs += '----'
 
-def popTab():
-    global tabs
-    tabs = tabs[:len(tabs)-4]
+def popTab(n):
+    pass
 
 def getTabs():
-    global tabs
-    return tabs
+    # global tabs
+    return '----'
 
-def PROG():
-    print(getTabs() + "> " + "PROG")
-    pushTab()
+def PROG(n):
+    print(getTabs()* n + "> " + "PROG")
+    
 
     global output
     output += "main\n"
-    GLOBVARS()
-    ALGO()
-    FUNCTIONS()
-    popTab()
-    
+    GLOBVARS(n+1)
+    ALGO(n+1)
+    FUNCTIONS(n+1)
 
-def GLOBVARS():
-    print(getTabs() + "> " + "GLOBVARS")
-    pushTab()
+def GLOBVARS(n):
+    print(getTabs()* n + "> " + "GLOBVARS")
+    
 
     global output
     rule = getUserInput("Enter GLOBVARS rule: ", r"^[1-2]$")
@@ -52,16 +49,16 @@ def GLOBVARS():
     if rule == "1":
         return
     elif rule == "2":
-        VTYP()
-        VNAME()
+        VTYP(n+1)
+        VNAME(n+1)
         output += ',\n'
-        GLOBVARS()
+        GLOBVARS(n+1)
     
-    popTab()
+    
 
-def VTYP():
-    print(getTabs() + "> " + "VTYP")
-    pushTab()
+def VTYP(n):
+    print(getTabs()* n + "> " + "VTYP")
+    
     global output
     rule = getUserInput("Enter VTYPE rule: ", r"^[1-2]$")
 
@@ -69,27 +66,27 @@ def VTYP():
         output += "num "
     elif rule == "2":
         output += "text "
-    popTab()
+    
 
-def VNAME():
-    print(getTabs() + "> " + "VNAME")
-    pushTab()
+def VNAME(n):
+    print(getTabs()* n + "> " + "VNAME")
+    
     global output, tokenClassVRegularExpression
     output += getUserInput("Enter variable name: ", tokenClassVRegularExpression)
-    popTab()
+    
 
-def ALGO():
-    print(getTabs() + "> " + "ALGO")
-    pushTab()
+def ALGO(n):
+    print(getTabs()* n + "> " + "ALGO")
+    
     global output
     output += "\nbegin\n"
-    INSTRUC()
+    INSTRUC(n+1)
     output += "\nend\n"
-    popTab()
+    
 
-def INSTRUC():
-    print(getTabs() + "> " + "INSTRUC")
-    pushTab()
+def INSTRUC(n):
+    print(getTabs()* n + "> " + "INSTRUC")
+    
     global output
     rule = getUserInput("Enter INSTRUC rule: ", r"^[1-2]$")
 
@@ -97,14 +94,14 @@ def INSTRUC():
         output += " "
         return 
     elif rule == "2":
-        COMMAND()
+        COMMAND(n+1)
         output += "; "
-        INSTRUC()
-    popTab()
+        INSTRUC(n+1)
+    
 
-def COMMAND():
-    print(getTabs() + "> " + "COMMAND")
-    pushTab()
+def COMMAND(n):
+    print(getTabs()* n + "> " + "COMMAND")
+    
     global output
     rule = getUserInput("Enter COMMAND rule: ", r"^[1-6]$")
 
@@ -113,31 +110,34 @@ def COMMAND():
     elif rule == "2":
         output += "halt"
     elif rule == "3":
-        output += "return "
-        ATOMIC()
+        output += "print "
+        ATOMIC(n+1)
     elif rule == "4":
-        ASSIGN()
+        ASSIGN(n+1)
     elif rule == "5":
-        CALL()
+        CALL(n+1)
     elif rule == "6":
-        BRANCH()
-    popTab()
+        BRANCH(n+1)
+    elif rule == "7":
+        output += "return "
+        ATOMIC(n+1)
+    
 
-def ATOMIC():
-    print(getTabs() + "> " + "ATOMIC")
-    pushTab()
+def ATOMIC(n):
+    print(getTabs()* n + "> " + "ATOMIC")
+    
     global output
     rule = getUserInput("Enter ATOMIC rule: ", r"^[1-2]$")
 
     if rule == "1":
-        VNAME()
+        VNAME(n+1)
     elif rule == "2":
-        CONST()
-    popTab()
+        CONST(n+1)
+    
 
-def CONST():
-    print(getTabs() + "> " + "CONST")
-    pushTab()
+def CONST(n):
+    print(getTabs()* n + "> " + "CONST")
+    
     global output, tokenClassNRegularExpression, tokenClassTRegularExpression
     rule = getUserInput("Enter CONST rule: ", r"^[1-2]$")
 
@@ -145,143 +145,143 @@ def CONST():
         output += getUserInput("Enter a valid number: ", tokenClassNRegularExpression) + " "
     elif rule == "2":
         output += getUserInput("Enter a valid string: ", tokenClassTRegularExpression) + " "
-    popTab()
+    
 
-def ASSIGN():
-    print(getTabs() + "> " + "ASSIGN")
-    pushTab()
+def ASSIGN(n):
+    print(getTabs()* n + "> " + "ASSIGN")
+    
     global output
     rule = getUserInput("Enter ASSIGN rule: ", r"^[1-2]$")
 
     if rule == "1":
-        VNAME()
+        VNAME(n+1)
         output += " <input"
     elif rule == "2":
-        VNAME()
+        VNAME(n+1)
         output += " = "
-        TERM()
-    popTab()
+        TERM(n+1)
+    
 
-def CALL():
-    print(getTabs() + "> " + "CALL")
-    pushTab()
+def CALL(n):
+    print(getTabs()* n + "> " + "CALL")
+    
     global output
     
-    FNAME()
+    FNAME(n+1)
     output += "("
-    ATOMIC()
+    ATOMIC(n+1)
     output += ", "
-    ATOMIC()
+    ATOMIC(n+1)
     output += ", "
-    ATOMIC()
+    ATOMIC(n+1)
     output += ") "
-    popTab()
+    
 
-def BRANCH():
-    print(getTabs() + "> " + "BRANCH")
-    pushTab()
+def BRANCH(n):
+    print(getTabs()* n + "> " + "BRANCH")
+    
     global output
 
     output += "if "
-    COND()
+    COND(n+1)
     output += "\nthen "
-    ALGO()
+    ALGO(n+1)
     output += "\nelse "
-    ALGO()
-    popTab()
+    ALGO(n+1)
+    
 
-def TERM():
-    print(getTabs() + "> " + "TERM")
-    pushTab()
+def TERM(n):
+    print(getTabs()* n + "> " + "TERM")
+    
     rule = getUserInput("Enter TERM rule: ", r"^[1-3]$")
 
     if rule == "1":
-        ATOMIC()
+        ATOMIC(n+1)
     elif rule == "2":
-        CALL()
+        CALL(n+1)
     elif rule == "3":
-        OP()
-    popTab()
+        OP(n+1)
+    
 
-def OP():
-    print(getTabs() + "> " + "OP")
-    pushTab()
+def OP(n):
+    print(getTabs()* n + "> " + "OP")
+    
     global output
     rule = getUserInput("Enter OP rule: ", r"^[1-2]$")
 
     if rule == "1":
-        UNOP()
+        UNOP(n+1)
         output += "("
-        ARG()
+        ARG(n+1)
         output += ")"
     elif rule == "2":
-        BINOP()
+        BINOP(n+1)
         output += "("
-        ARG()
+        ARG(n+1)
         output += ", "
-        ARG()
+        ARG(n+1)
         output += ")"
-    popTab()
+    
 
-def ARG():
-    print(getTabs() + "> " + "ARG")
-    pushTab()
+def ARG(n):
+    print(getTabs()* n + "> " + "ARG")
+    
     rule = getUserInput("Enter ARG rule: ", r"^[1-2]$")
 
     if rule == "1":
-        ATOMIC()
+        ATOMIC(n+1)
     elif rule == "2":
-        OP()
-    popTab()
+        OP(n+1)
+    
 
-def COND():
-    print(getTabs() + "> " + "COND")
-    pushTab()
+def COND(n):
+    print(getTabs()* n + "> " + "COND")
+    
     rule = getUserInput("Enter COND rule: ", r"^[1-2]$")
 
     if rule == "1":
-        SIMPLE()
+        SIMPLE(n+1)
     elif rule == "2":
-        COMPOSIT()
-    popTab()
+        COMPOSIT(n+1)
+    
 
-def SIMPLE():
-    print(getTabs() + "> " + "SIMPLE")
-    pushTab()
+def SIMPLE(n):
+    print(getTabs()* n + "> " + "SIMPLE")
+    
     global output
 
-    BINOP()
+    BINOP(n+1)
     output += "("
-    ATOMIC()
+    ATOMIC(n+1)
     output += ", "
-    ATOMIC()
+    ATOMIC(n+1)
     output += ")"
-    popTab()
+    
 
-def COMPOSIT():
-    print(getTabs() + "> " + "COMPOSIT")
-    pushTab()
+def COMPOSIT(n):
+    print(getTabs()* n + "> " + "COMPOSIT")
+    
     global output
 
     rule = getUserInput("Enter COMPOSIT rule: ", r"^[1-2]$")
 
     if rule == "1":
-        BINOP()
+        BINOP(n+1)
         output += "("
-        ATOMIC()
+        ATOMIC(n+1)
         output += ", "
-        ATOMIC()
+        ATOMIC(n+1)
         output += ")"
     elif rule == "2":
-        UNOP()
+        UNOP(n+1)
         output += "("
-        SIMPLE()
+        SIMPLE(n+1)
         output += ")"
-    popTab()
+    
 
-def UNOP():
-    print(getTabs() + "> " + "UNOP")
-    pushTab()
+def UNOP(n):
+    print(getTabs()* n + "> " + "UNOP")
+    
     global output
 
     rule = getUserInput("Enter UNOP rule: ", r"^[1-2]$")
@@ -290,11 +290,11 @@ def UNOP():
         output += "not"
     elif rule == "2":
         output += "sqrt"
-    popTab()
+    
 
-def BINOP():
-    print(getTabs() + "> " + "BINOP")
-    pushTab()
+def BINOP(n):
+    print(getTabs()* n + "> " + "BINOP")
+    
     global output
 
     rule = getUserInput("Enter BINOP rule: ", r"^[1-8]$")
@@ -315,54 +315,54 @@ def BINOP():
         output += "mul"
     elif rule == "2":
         output += "div"
-    popTab()
+    
 
-def FNAME():
-    print(getTabs() + "> " + "FNAME")
-    pushTab()
+def FNAME(n):
+    print(getTabs()* n + "> " + "FNAME")
+    
     global output, tokenClassFRegularExpression
 
     output += getUserInput("Enter function name: ", tokenClassFRegularExpression)
-    popTab()
+    
 
-def FUNCTIONS():
-    print(getTabs() + "> " + "FUNCTIONS")
-    pushTab()
+def FUNCTIONS(n):
+    print(getTabs()* n + "> " + "FUNCTIONS")
+    
     rule = getUserInput("Enter FUNCTIONS rule: ", r"^[1-2]$")
 
     if rule == "1":
         return
     elif rule == "2":
-        DECL()
-        FUNCTIONS()
-    popTab()
+        DECL(n+1)
+        FUNCTIONS(n+1)
+    
 
-def DECL():
-    print(getTabs() + "> " + "DECL")
-    pushTab()
-    HEADER()
-    BODY()
-    popTab()
+def DECL(n):
+    print(getTabs()* n + "> " + "DECL")
+    
+    HEADER(n+1)
+    BODY(n+1)
+    
 
-def HEADER():
-    print(getTabs() + "> " + "HEADER")
-    pushTab()
+def HEADER(n):
+    print(getTabs()* n + "> " + "HEADER")
+    
     global output
 
-    FTYP()
-    FNAME()
+    FTYP(n+1)
+    FNAME(n+1)
     output += "("
-    VNAME()
+    VNAME(n+1)
     output += ", "
-    VNAME()
+    VNAME(n+1)
     output += ", "
-    VNAME()
+    VNAME(n+1)
     output += ")"
-    popTab()
+    
 
-def FTYP():
-    print(getTabs() + "> " + "FTYP")
-    pushTab()
+def FTYP(n):
+    print(getTabs()* n + "> " + "FTYP")
+    
     global output
 
     rule = getUserInput("Enter FTYP rule: ", r"^[1-2]$")
@@ -371,63 +371,63 @@ def FTYP():
         output += "num "
     elif rule == "2":
         output += "void "
-    popTab()
+    
 
-def BODY():
-    print(getTabs() + "> " + "BODY")
-    pushTab()
+def BODY(n):
+    print(getTabs()* n + "> " + "BODY")
+    
     global output
 
-    PROLOG()
-    LOCVARS()
-    ALGO()
-    EPILOG()
-    SUBFUNCS()
+    PROLOG(n+1)
+    LOCVARS(n+1)
+    ALGO(n+1)
+    EPILOG(n+1)
+    SUBFUNCS(n+1)
     output += "\nend"
-    popTab()
+    
 
-def PROLOG():
-    print(getTabs() + "> " + "PROLOG")
-    pushTab()
+def PROLOG(n):
+    print(getTabs()* n + "> " + "PROLOG")
+    
     global output
     output += "{\n"
-    popTab()
+    
 
-def EPILOG():
-    print(getTabs() + "> " + "EPILOG")
-    pushTab()
+def EPILOG(n):
+    print(getTabs()* n + "> " + "EPILOG")
+    
     global output
     output += "\n}\n"
-    popTab()
+    
 
-def LOCVARS():
-    print(getTabs() + "> " + "LOCVARS")
-    pushTab()
+def LOCVARS(n):
+    print(getTabs()* n + "> " + "LOCVARS")
+    
     global output
 
-    VTYP()
-    VNAME()
+    VTYP(n+1)
+    VNAME(n+1)
     output += ",\n"
-    VTYP()
-    VNAME()
+    VTYP(n+1)
+    VNAME(n+1)
     output += ",\n"
-    VTYP()
-    VNAME()
+    VTYP(n+1)
+    VNAME(n+1)
     output += ",\n"
-    popTab()
+    
 
-def SUBFUNCS():
-    print(getTabs() + "> " + "SUBFUNCS")
-    pushTab()
-    FUNCTIONS()
-    popTab()
+def SUBFUNCS(n):
+    print(getTabs()* n + "> " + "SUBFUNCS")
+    
+    FUNCTIONS(n+1)
+    
 
 def start():
     global output
     output = ""
-    PROG()
+    PROG(0)
 
-    with open("./samples/output.txt", "w") as file:
+    with open(input("Output file name (please add .txt): "), "w") as file:
         file.write(output)
 
 start()
