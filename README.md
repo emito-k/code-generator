@@ -130,5 +130,5 @@ This script generates test code for the COS 341 Project. Simply run the script, 
 - **Token-Class V**: Represents variable names, defined by the regular expression: `r'^V_[a-z]([a-z]|[0-9])*$'`
 - **Token-Class F**: Represents function names, defined by the regular expression: `r'^F_[a-z]([a-z]|[0-9])*$'`
 - **Token-Class N**: Represents numbers, defined by the regular expression: `r"^-?(0|[1-9][0-9]*)(\.[0-9]*[1-9])?$"`
-- **Token-Class T**: Represents strings, defined by the regular expression: `r"^[A-Z][a-z]{0,7}$"`
+- **Token-Class T**: Represents strings, defined by the regular expression: `r"^\"[A-Z][a-z]{0,7}\"$"`
 
