@@ -2,7 +2,7 @@ import re
 
 tokenClassVRegularExpression = r'^V_[a-z]([a-z]|[0-9])*$' # This regular expression accepts variable names
 tokenClassFRegularExpression = r'^F_[a-z]([a-z]|[0-9])*$' # This regular expression accepts function names
-tokenClassTRegularExpression = r"^[A-Z][a-z]{0,7}$" # This regular expression accepts strings
+tokenClassTRegularExpression = r"^\"[A-Z][a-z]{0,7}\"$" # This regular expression accepts strings
 tokenClassNRegularExpression = r"^-?(0|[1-9][0-9]*)(\.[0-9]*[1-9])?$" # This accepts numbers that include
 # BUG: This regular expression accepts -0, which is invalid but we'll ignore it for now
 
