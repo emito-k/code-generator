@@ -33,7 +33,7 @@ This script generates test code for the COS 341 Project. Simply run the script, 
 4. `COMMAND ::= ASSIGN`
 5. `COMMAND ::= CALL // call to a void-function that only updates global variables`
 6. `COMMAND ::= BRANCH`
-7. `COMMAND ::= print ATOMIC`
+7. `COMMAND ::= return ATOMIC`
 
 ### 8. `ATOMIC`
 1. `ATOMIC ::= VNAME`
